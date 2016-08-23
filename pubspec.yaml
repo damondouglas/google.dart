@@ -1,0 +1,15 @@
+name: google
+version: 0.0.1
+description: Run google apis from cli.
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+
+dev_dependencies:
+  test: '>=0.12.0 <0.13.0'
+dependencies:
+  googleapis: '>=0.29.0 <0.30.0'
+  googleapis_auth: '>=0.2.3+4 <0.3.0'
+  gnupg:
+    git: git@github.com:damondouglas/gnupg.dart.git
+  args: '>=0.13.5 <0.14.0'
+  yaml: '>=2.1.10 <3.0.0'

@@ -7,28 +7,29 @@ import 'secret.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:yaml/yaml.dart' as yaml;
 import 'package:http/http.dart' as http;
+import 'base.dart';
 
 // Usage:
 // var runner = new CommandRunner("...", "")
 // ..addCommand(new AuthCommand())
 // ..run(args);
 
-final pathToSecret = 'secret.json';
-
-class AuthCommand extends Command {
+class AuthCommand extends BaseCommand {
 	final name = "auth";
 	final description = "Authenticate user using OAuth2 flow.";
 
+	AuthCommand(String configPath) : super(configPath);
+
 	Future run() async {
-		var secret = new Secret.from(pathToSecret);
-		var scopesFile = new File('scopes.yaml');
+		var credUtil = new Credentials(credentialsPath);
+		var secret = new Secret.from(secretPath);
+		var scopesFile = new File(scopesPath);
 		var scopes = yaml.loadYaml(scopesFile.readAsStringSync());
 		var id = new auth.ClientId(secret.clientId, secret.clientSecret);
 		var client = new http.Client();
 		var cred = await auth.obtainAccessCredentialsViaUserConsent(id, scopes['base'].split(','), client, prompt);
-		
+		await credUtil.save(cred.accessToken);
 		client.close();
-
 	}
 }
 

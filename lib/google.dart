@@ -3,4 +3,4 @@
 
 library google;
 
-export 'src/auth.dart';
+export 'src/auth_command.dart';

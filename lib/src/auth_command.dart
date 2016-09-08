@@ -24,11 +24,17 @@ class AuthCommand extends BaseCommand {
 		var credUtil = new Credentials(credentialsPath);
 		var secret = new Secret.from(secretPath);
 		var scopesFile = new File(scopesPath);
-		var scopes = yaml.loadYaml(scopesFile.readAsStringSync());
+		var scopesYaml = yaml.loadYaml(scopesFile.readAsStringSync());
+		var keys = scopesYaml.keys.where((key) => key != 'base');
+		var scopes = scopesYaml['base'].split(',');
+		scopes.addAll(
+			keys.map((k) => scopesYaml[k])
+			.toList()
+		);
 		var id = new auth.ClientId(secret.clientId, secret.clientSecret);
 		var client = new http.Client();
-		var cred = await auth.obtainAccessCredentialsViaUserConsent(id, scopes['base'].split(','), client, prompt);
-		await credUtil.save(cred.accessToken);
+		var cred = await auth.obtainAccessCredentialsViaUserConsent(id, scopes, client, prompt);
+		await credUtil.save(cred);
 		client.close();
 	}
 }

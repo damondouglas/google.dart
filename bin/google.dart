@@ -10,7 +10,15 @@ main(List<String> arguments) {
   var runner = new CommandRunner("google","");
   runner.argParser.addOption("config", abbr: 'c', help: 'Directory of configuration assets.', defaultsTo: '$homePath/.google');
   var results = runner.parse(arguments);
+
   runner
   ..addCommand(new google.AuthCommand(results['config']))
-  ..run(arguments);
+  ..addCommand(new google.WhoamiCommand(results['config']))
+  ..addCommand(new google.ScopeCommand(results['config']))
+  ..addCommand(new google.InitCommand(results['config']))
+  ..run(arguments)
+  .catchError((UsageException e) {
+    print(e.usage);
+  });
+
 }

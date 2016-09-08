@@ -1,3 +1,3 @@
 # google
 
-A sample command-line application.
+Access google API services from the commandline.

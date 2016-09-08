@@ -25,9 +25,11 @@ class Secret {
 class Credentials {
   String path;
   Credentials(this.path);
-  Future save(auth.AccessToken token) {
-
+  Future save(auth.AccessCredentials cred) {
+    var token = cred.accessToken;
   	var data = {
+      'refreshToken': cred.refreshToken,
+      'scopes': cred.scopes,
   		'type': token.type,
   		'data': token.data,
   		'expiry': token.expiry.millisecondsSinceEpoch
@@ -36,6 +38,20 @@ class Credentials {
   	var dataStr = JSON.encode(data);
   	var credFile = new File(path);
   	return credFile.writeAsString(dataStr);
+  }
+
+  Future<auth.AccessCredentials> load() async {
+    var credFile = new File(path);
+    var dataStr = await credFile.readAsString();
+    var data = JSON.decode(dataStr);
+    var refreshToken = data['refreshToken'];
+    var scopes = data['scopes'];
+    var type = data['type'];
+    var tokenData = data['data'];
+    var expiry = new DateTime.fromMillisecondsSinceEpoch(data['expiry']).toUtc();
+    var token = new auth.AccessToken(type, tokenData, expiry);
+    var cred = new auth.AccessCredentials(token, refreshToken, scopes);
+    return cred;
   }
 }
 

@@ -14,10 +14,11 @@ class WhoamiCommand extends BaseCommand {
 	WhoamiCommand(String configPath) : super(configPath);
 
 	Future run() async {
-		var credUtil = new Credentials(credentialsPath);
-		var cred = await credUtil.load();
-		var baseClient = new http.Client();
-		var client = auth.authenticatedClient(baseClient, cred);
+		// var credUtil = new Credentials(credentialsPath);
+		// var cred = await credUtil.load();
+		// var baseClient = new http.Client();
+		// var client = auth.authenticatedClient(baseClient, cred);
+		var client = await loadClient(secretPath, credentialsPath);
 		var api = new people.PeopleApi(client);
 		var p = await api.people.get("people/me");
 		var sb = new StringBuffer();

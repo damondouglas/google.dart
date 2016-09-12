@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:gnupg/gnupg.dart' as gnupg;
+import 'package:http/http.dart' as http;
 
 final credPath = '.credentials';
 
@@ -11,8 +12,8 @@ class Secret {
   String clientId;
   String clientSecret;
 
-  Secret.from(String relativePath) {
-    var f = new File(relativePath);
+  Secret.from(String path) {
+    var f = new File(path);
     assert(f.existsSync());
     var secretData = f.readAsStringSync();
     var secret = JSON.decode(secretData);
@@ -53,6 +54,17 @@ class Credentials {
     var cred = new auth.AccessCredentials(token, refreshToken, scopes);
     return cred;
   }
+}
+
+Future<auth.AutoRefreshingAuthClient> loadClient(String pathToSecret, String pathToCredentials) async {
+  var secret = new Secret.from(pathToSecret);
+  var cred = new Credentials(pathToCredentials);
+  var id = new auth.ClientId(secret.clientId, secret.clientSecret);
+  var accessCredentials = await cred.load();
+  var baseClient = new http.Client();
+  var client = auth.autoRefreshingClient(id, accessCredentials, baseClient);
+  client.credentialUpdates.listen((auth.AccessCredentials refreshedCredentials) => cred.save(refreshedCredentials));
+  return client;
 }
 
 Future<String> _encrypt(String data) {

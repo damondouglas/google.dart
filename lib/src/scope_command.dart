@@ -4,6 +4,7 @@ import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'dart:async';
 import 'base.dart';
 import 'secret.dart' as secret;
+import 'dart:io';
 
 // Usage:
 // var runner = new CommandRunner("...", "")
@@ -16,6 +17,7 @@ class ScopeCommand extends BaseCommand {
 
 	ScopeCommand(String configPath) : super(configPath) {
 		addSubcommand(new ListCommand(configPath));
+		addSubcommand(new AddCommand(configPath));
 	}
 
 	Future run() {
@@ -38,10 +40,18 @@ class ListCommand extends BaseCommand {
 class AddCommand extends BaseCommand {
 	final name = "add";
 	final description = "Add scope to authorized scopes";
+	final usage = "google scope add <scope>";
 
 	AddCommand(String configPath) : super(configPath);
 
 	Future run() async {
-		
+		if (argResults.rest.isEmpty) {
+			printUsage();
+			exit(0);
+		}
+	}
+
+	_printAvailableScopes() {
+
 	}
 }

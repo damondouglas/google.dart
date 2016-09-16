@@ -5,6 +5,7 @@ import 'dart:async';
 import 'base.dart';
 import 'secret.dart' as secret;
 import 'dart:io';
+import 'package:yaml/yaml.dart' as yaml;
 
 // Usage:
 // var runner = new CommandRunner("...", "")
@@ -21,6 +22,7 @@ class ScopeCommand extends BaseCommand {
 	}
 
 	Future run() {
+
 	}
 }
 
@@ -44,14 +46,47 @@ class AddCommand extends BaseCommand {
 
 	AddCommand(String configPath) : super(configPath);
 
-	Future run() async {
-		if (argResults.rest.isEmpty) {
-			printUsage();
-			exit(0);
-		}
+	@override
+	printUsage() {
+		print("Scope not found.");
+		print("Usage:");
+		var availableScopes = _loadAvailableScopes();
+		var scopeKeys = new List.from(availableScopes.keys.where((key) => key != "base"));
+		super.printUsage();
+		print("");
+		scopeKeys.forEach((key) => print("\t$key: ${availableScopes[key]}"));
+		exit(0);
 	}
 
-	_printAvailableScopes() {
+	Future run() async {
+		var availableScopes = _loadAvailableScopes();
+		var installedScopes = _loadInstalledScopes();
+		var scopeKeys = new List.from(
+			availableScopes.keys
+			.where((key) => !installedScopes.containsKey(key))
+		);
+		if (argResults.rest.isEmpty) printUsage();
 
+		var scopeKey = argResults.rest.first;
+		if (!availableScopes.containsKey(scopeKey)) printUsage();
+
+		var scope = availableScopes[scopeKey];
+
+		var scopesFile = new File(scopesPath);
+		var scopesData = scopesFile.readAsStringSync();
+		scopesFile.writeAsStringSync("$scopeKey: $scope", mode: FileMode.APPEND);
+		print("Run: `google auth` to complete installation.");
+	}
+
+	Map _loadAvailableScopes() {
+		var availableScopesFile = new File(super.availableScopesPath);
+		var availableScopesData = availableScopesFile.readAsStringSync();
+		return yaml.loadYaml(availableScopesData);
+	}
+
+	Map _loadInstalledScopes() {
+		var scopesFile = new File(scopesPath);
+		var scopesData = scopesFile.readAsStringSync();
+		return yaml.loadYaml(scopesData);
 	}
 }

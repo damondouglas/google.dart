@@ -13,9 +13,12 @@ Global options:
                 (defaults to "/Users/dd/.google")
 
 Available commands:
-  auth     Authenticate user using OAuth2 flow.
-  help     Display help information for google.
-  init     Initiates configuration files.
-  scope    Manage OAuth scopes.
-  whoami   Display authenticated user info.
+  auth       Authenticate user using OAuth2 flow.
+  calendar
+  drive
+  gmail
+  help       Display help information for google.
+  init       Initiates configuration files.
+  scope      Manage OAuth scopes.
+  whoami     Display authenticated user info.
 ```

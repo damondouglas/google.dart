@@ -6,14 +6,15 @@ import 'package:args/command_runner.dart';
 import 'dart:io';
 
 main(List<String> arguments) {
-  var calendar = new google.ApiLibrary(Uri.parse('package:googleapis/calendar/v3.dart'));
-  var gmail = new google.ApiLibrary(Uri.parse('package:googleapis/gmail/v1.dart'));
-  var drive = new google.ApiLibrary(Uri.parse('package:googleapis/drive/v3.dart'));
   var homePath = Platform.environment['HOME'];
   var runner = new CommandRunner("google","");
   runner.argParser.addOption("config", abbr: 'c', help: 'Directory of configuration assets.', defaultsTo: '$homePath/.google');
   var results = runner.parse(arguments);
 
+  var calendar = new google.ApiLibrary(Uri.parse('package:googleapis/calendar/v3.dart'), results['config']);
+  var gmail = new google.ApiLibrary(Uri.parse('package:googleapis/gmail/v1.dart'), results['config']);
+  var drive = new google.ApiLibrary(Uri.parse('package:googleapis/drive/v3.dart'), results['config']);
+  
   runner
   ..addCommand(new google.AuthCommand(results['config']))
   ..addCommand(new google.WhoamiCommand(results['config']))

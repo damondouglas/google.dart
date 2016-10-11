@@ -8,3 +8,5 @@ export 'src/whoami_command.dart';
 export 'src/scope_command.dart';
 export 'src/init_command.dart';
 export 'src/reflect.dart';
+export 'src/encrypt.dart';
+export 'src/decrypt.dart';

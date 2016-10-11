@@ -9,21 +9,21 @@ import 'package:http/http.dart' as http;
 import 'package:googleapis/people/v1.dart' as people;
 
 class WhoamiCommand extends BaseCommand {
-	final name = "whoami";
-	final description = "Display authenticated user info.";
-	WhoamiCommand(String configPath) : super(configPath);
+  final name = "whoami";
+  final description = "Display authenticated user info.";
+  WhoamiCommand(String configPath) : super(configPath);
 
-	Future run() async {
-		var client = await loadClient(secretPath, credentialsPath);
-		var api = new people.PeopleApi(client);
-		var p = await api.people.get("people/me");
-		var sb = new StringBuffer();
+  Future run() async {
+    var client = await loadClient(secretPath, credentialsPath);
+    var api = new people.PeopleApi(client);
+    var p = await api.people.get("people/me");
+    var sb = new StringBuffer();
 
-		p.names.forEach((name) => sb.writeln(name.displayName));
-		p.emailAddresses.forEach((e) => sb.writeln(e.value));
-		p.urls.forEach((u) => sb.writeln(u.value));
+    p.names.forEach((name) => sb.writeln(name.displayName));
+    p.emailAddresses.forEach((e) => sb.writeln(e.value));
+    p.urls.forEach((u) => sb.writeln(u.value));
 
-		print(sb.toString());
-		exit(0);
-	}
+    print(sb.toString());
+    exit(0);
+  }
 }

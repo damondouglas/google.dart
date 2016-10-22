@@ -23,11 +23,15 @@ class AuthCommand extends BaseCommand {
   Future run() async {
     var credUtil = new Credentials(credentialsPath);
     var secret = new Secret.from(secretPath);
-    var scopesFile = new File(scopesPath);
-    var scopesYaml = yaml.loadYaml(scopesFile.readAsStringSync());
-    var keys = scopesYaml.keys.where((key) => key != 'base');
-    var scopes = scopesYaml['base'].split(',');
-    scopes.addAll(keys.map((k) => scopesYaml[k]).toList());
+    var scopes = [
+      "email",
+      "profile"
+    ];
+    // var scopesFile = new File(scopesPath);
+    // var scopesYaml = yaml.loadYaml(scopesFile.readAsStringSync());
+    // var keys = scopesYaml.keys.where((key) => key != 'base');
+    // var scopes = scopesYaml['base'].split(',');
+    // scopes.addAll(keys.map((k) => scopesYaml[k]).toList());
     var id = new auth.ClientId(secret.clientId, secret.clientSecret);
     var client = new http.Client();
     var cred = await auth.obtainAccessCredentialsViaUserConsent(

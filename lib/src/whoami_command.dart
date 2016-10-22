@@ -1,7 +1,7 @@
 import 'package:args/args.dart' as args;
 import 'base.dart';
 import 'dart:async';
-import 'secret.dart';
+import 'secret.dart' as secret;
 import 'dart:io';
 import 'package:yaml/yaml.dart' as yaml;
 import 'package:googleapis_auth/auth_io.dart' as auth;
@@ -14,7 +14,7 @@ class WhoamiCommand extends BaseCommand {
   WhoamiCommand(String configPath) : super(configPath);
 
   Future run() async {
-    var client = await loadClient(secretPath, credentialsPath);
+    var client = await secret.loadClient(secretPath, credentialsPath);
     var api = new people.PeopleApi(client);
     var p = await api.people.get("people/me");
     var sb = new StringBuffer();

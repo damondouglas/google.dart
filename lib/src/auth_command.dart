@@ -8,6 +8,7 @@ import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:yaml/yaml.dart' as yaml;
 import 'package:http/http.dart' as http;
 import 'base.dart';
+import 'package:googleapis/gmail/v1.dart' show MailGoogleComScope;
 
 // Usage:
 // var runner = new CommandRunner("...", "")
@@ -25,7 +26,8 @@ class AuthCommand extends BaseCommand {
     var secret = new Secret.from(secretPath);
     var scopes = [
       "email",
-      "profile"
+      "profile",
+
     ];
     // var scopesFile = new File(scopesPath);
     // var scopesYaml = yaml.loadYaml(scopesFile.readAsStringSync());

@@ -60,3 +60,12 @@ class BaseApiCommand extends BaseCommand {
   final description = "";
   BaseApiCommand(this.simpleName, String configPath) : super(configPath);
 }
+
+class LibraryReflector {
+  Uri uri;
+  LibraryReflector(this.uri);
+  List<Uri> get available => (){
+    print(this.uri.toFilePath());
+    return [];
+  }();
+}

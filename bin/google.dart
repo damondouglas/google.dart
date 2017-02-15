@@ -14,13 +14,6 @@ main(List<String> arguments) {
       defaultsTo: '$homePath/.google');
   var results = runner.parse(arguments);
 
-  var calendar = new google.ApiLibrary(
-      Uri.parse('package:googleapis/calendar/v3.dart'), results['config']);
-  var gmail = new google.ApiLibrary(
-      Uri.parse('package:googleapis/gmail/v1.dart'), results['config']);
-  var drive = new google.ApiLibrary(
-      Uri.parse('package:googleapis/drive/v3.dart'), results['config']);
-
   var configPath = results['config'];
 
   runner
@@ -28,11 +21,8 @@ main(List<String> arguments) {
     ..addCommand(new google.WhoamiCommand(configPath))
     ..addCommand(new google.ScopeCommand(configPath))
     ..addCommand(new google.InitCommand(configPath))
-    ..addCommand(new google.EncryptCommand(configPath))
-    ..addCommand(new google.DecryptCommand(configPath))
-    ..addCommand(calendar.load())
-    ..addCommand(gmail.load())
-    ..addCommand(drive.load())
+    ..addCommand(new google.InstallCommand(configPath))
+    ..addCommand(new google.UtilCommand(configPath))
     ..run(arguments).catchError((Exception e, StackTrace stackTrace) {
       if (e is UsageException)
         print(e.usage);

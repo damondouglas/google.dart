@@ -13,3 +13,5 @@ dependencies:
     git: git@github.com:damondouglas/gnupg.dart.git
   args: '>=0.13.5 <0.14.0'
   yaml: '>=2.1.10 <3.0.0'
+executables:
+  google.dart

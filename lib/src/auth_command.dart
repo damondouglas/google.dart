@@ -8,6 +8,7 @@ import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:yaml/yaml.dart' as yaml;
 import 'package:http/http.dart' as http;
 import 'base.dart';
+import 'library.dart' show Config;
 
 // Usage:
 // var runner = new CommandRunner("...", "")
@@ -27,12 +28,15 @@ class AuthCommand extends BaseCommand {
       "email",
       "profile",
     ];
-    // var scopesFile = new File(scopesPath);
-    // var scopesYaml = yaml.loadYaml(scopesFile.readAsStringSync());
-    // var keys = scopesYaml.keys.where((key) => key != 'base');
-    // var scopes = scopesYaml['base'].split(',');
-    // scopes.addAll(keys.map((k) => scopesYaml[k]).toList());
-    var id = new auth.ClientId(secret.clientId, secret.clientSecret);
+    var config = new Config(configPath);
+    var scopesToAdd = config.libraries.keys
+    .where((String libraryName) => config.getScopes(libraryName).isNotEmpty)
+    .map((String libraryName) => config.getScopes(libraryName));
+
+    scopesToAdd.forEach((List<String> libraryScopes) => scopes.addAll(libraryScopes));
+    var clientId = await secret.clientId;
+    var clientSecret = await secret.clientSecret;
+    var id = new auth.ClientId(clientId, clientSecret);
     var client = new http.Client();
     var cred = await auth.obtainAccessCredentialsViaUserConsent(
         id, scopes, client, prompt);

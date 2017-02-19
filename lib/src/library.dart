@@ -7,6 +7,7 @@ import 'package:path/path.dart' as path;
 
 final _CONFIG_FILE_NAME = 'libraries.json';
 final _URI = 'uri';
+final _SCOPES = 'scopes';
 
 Future<List<String>> getAvailableLibraries() async {
   var dirs = await getLibraryDirs();
@@ -53,10 +54,15 @@ class Config {
     libraries = JSON.decode(configData);
   }
 
-  save(String name, String uri) {
-    libraries[name] = {_URI: uri};
+  save() {
     configFile.writeAsStringSync(JSON.encode(libraries));
   }
 
+  addUri(String name, String uri) => libraries[name] = {_URI: uri, _SCOPES: []};
+
+  setScopes(String name, List scopes) => libraries[name][_SCOPES] = scopes;
+
   Uri operator [](String libraryName) => Uri.parse(libraries[libraryName][_URI]);
+
+  List<String> getScopes(String libraryName) => libraries[libraryName][_SCOPES];
 }

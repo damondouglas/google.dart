@@ -72,7 +72,8 @@ class _AddCommand extends BaseCommand {
 
     var vFileName = versionFileNames.last;
     var libUri = "$_URI_BASE/$libraryName/$vFileName";
-    config.save(libraryName, libUri);
+    config.addUri(libraryName, libUri);
+    config.save();
     print("Saved $libraryName to ${config.configFile.path} pointing to $libUri");
   }
 

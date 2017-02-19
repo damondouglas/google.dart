@@ -44,9 +44,6 @@ import 'package:googleapis/content/v2sandbox.dart' deferred as f2;
 import 'package:googleapis/customsearch/v1.dart' deferred as g2;
 import 'package:googleapis/dataproc/v1.dart' deferred as h2;
 import 'package:googleapis/deploymentmanager/v2.dart' deferred as i2;
-import 'package:googleapis/dfareporting/v2_2.dart' deferred as j2;
-import 'package:googleapis/dfareporting/v2_3.dart' deferred as k2;
-import 'package:googleapis/dfareporting/v2_4.dart' deferred as l2;
 import 'package:googleapis/dfareporting/v2_5.dart' deferred as m2;
 import 'package:googleapis/discovery/v1.dart' deferred as n2;
 import 'package:googleapis/dns/v1.dart' deferred as o2;
@@ -56,7 +53,6 @@ import 'package:googleapis/drive/v2.dart' deferred as r2;
 import 'package:googleapis/drive/v3.dart' deferred as s2;
 import 'package:googleapis/firebaserules/v1.dart' deferred as t2;
 import 'package:googleapis/fitness/v1.dart' deferred as u2;
-import 'package:googleapis/freebase/v1.dart' deferred as v2;
 import 'package:googleapis/fusiontables/v1.dart' deferred as w2;
 import 'package:googleapis/fusiontables/v2.dart' deferred as x2;
 import 'package:googleapis/games/v1.dart' deferred as y2;
@@ -213,4 +209,22 @@ class LibraryReflector {
     print(this.uri.toFilePath());
     return [];
   }();
+}
+
+class Scope {
+  ClassMirror api;
+  Map<String, String> available = {};
+  Scope(Uri libraryUri) {
+    var lib = currentMirrorSystem().libraries[libraryUri];
+    var api = lib.declarations.values.firstWhere((mirror) =>
+        mirror.qualifiedName.toString().contains("Api") &&
+        !mirror.qualifiedName.toString().contains("Resource"));
+
+    var scopeFields = api.staticMembers.keys.where((Symbol key) => MirrorSystem.getName(key).contains('Scope'));
+    scopeFields.forEach((field) {
+      var fieldName = MirrorSystem.getName(field);
+      var scope = api.getField(field).reflectee;
+      available[fieldName] = scope;
+    });
+  }
 }

@@ -27,7 +27,6 @@ main(List<String> arguments) {
     new google.UtilCommand(configPath),
   ];
 
-  // commands.addAll(
   var apiCommands = config.libraries.keys.map((String libraryName) {
     var lib = new google.ApiLibrary(config[libraryName], configPath);
     return lib.load();

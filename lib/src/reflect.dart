@@ -1,10 +1,17 @@
 library google.reflect;
 
+import 'dart:convert';
+import 'dart:io';
 import 'dart:async';
 import 'dart:mirrors';
 import 'package:args/command_runner.dart';
 import 'base.dart';
 import 'secret.dart' as secret;
+
+import 'package:googleapis/calendar/v3.dart' deferred as calendar;
+import 'package:googleapis/gmail/v1.dart';
+import 'package:googleapis/drive/v3.dart';
+import 'package:googleapis/translate/v2.dart';
 
 class ApiLibrary {
   Uri uri;

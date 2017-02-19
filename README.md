@@ -14,9 +14,6 @@ Global options:
 
 Available commands:
   auth       Authenticate user using OAuth2 flow.
-  calendar
-  drive
-  gmail
   help       Display help information for google.
   init       Initiates configuration files.
   scope      Manage OAuth scopes.

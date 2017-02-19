@@ -10,3 +10,4 @@ export 'src/init_command.dart';
 export 'src/install_command.dart';
 export 'src/reflect.dart';
 export 'src/util_command.dart';
+export 'src/library.dart';

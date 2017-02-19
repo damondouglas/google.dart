@@ -4,9 +4,6 @@ import 'package:path/path.dart' as path;
 import 'dart:async';
 import 'dart:io';
 import 'base.dart';
-import 'package:googleapis/calendar/v3.dart' as calendar;
-import 'package:googleapis/gmail/v1.dart' as gmail;
-import 'package:googleapis/drive/v3.dart' as drive;
 
 // Usage:
 // var runner = new CommandRunner("...", "")
@@ -42,12 +39,6 @@ class InitCommand extends BaseCommand {
 
     sb.writeln("base: email,profile");
     await installedScopeFile.writeAsString(sb.toString());
-
-    new Map.from({
-      'calendar': calendar.CalendarApi.CalendarScope,
-      'gmail': gmail.GmailApi.MailGoogleComScope,
-      'drive': drive.DriveApi.DriveScope
-    }).forEach((k, v) => sb.writeln("$k: $v"));
 
     await availableScopeFile.writeAsString(sb.toString());
   }

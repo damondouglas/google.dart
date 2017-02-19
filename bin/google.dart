@@ -16,19 +16,32 @@ main(List<String> arguments) {
 
   var configPath = results['config'];
 
-  runner
-    ..addCommand(new google.AuthCommand(configPath))
-    ..addCommand(new google.WhoamiCommand(configPath))
-    ..addCommand(new google.ScopeCommand(configPath))
-    ..addCommand(new google.InitCommand(configPath))
-    ..addCommand(new google.InstallCommand(configPath))
-    ..addCommand(new google.UtilCommand(configPath))
-    ..run(arguments).catchError((Exception e, StackTrace stackTrace) {
-      if (e is UsageException)
-        print(e.usage);
-      else {
-        print(e);
-        print(stackTrace);
-      }
-    });
+  var config = new google.Config(configPath);
+
+  var commands = [
+    new google.AuthCommand(configPath),
+    new google.WhoamiCommand(configPath),
+    new google.ScopeCommand(configPath),
+    new google.InitCommand(configPath),
+    new google.InstallCommand(configPath),
+    new google.UtilCommand(configPath),
+  ];
+
+  // commands.addAll(
+  var apiCommands = config.libraries.keys.map((String libraryName) {
+    var lib = new google.ApiLibrary(config[libraryName], configPath);
+    return lib.load();
+  });
+
+  commands.addAll(apiCommands);
+
+  commands.forEach((Command command) => runner.addCommand(command));
+  runner.run(arguments).catchError((Exception e, StackTrace stackTrace) {
+    if (e is UsageException)
+      print(e.usage);
+    else {
+      print(e);
+      print(stackTrace);
+    }
+  });
 }
